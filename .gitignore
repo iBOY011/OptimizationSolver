@@ -17,9 +17,6 @@ yarn-error.log*
 
 *.log
 
-
-
-
 # IDE files
 .vscode/
 .idea/
@@ -27,10 +24,6 @@ yarn-error.log*
 # OS-specific files
 .DS_Store
 Thumbs.db
-
-# Exclure temporairement les fichiers spécifiques dans python_backend
-/python_backend/solver.py
-
 
 # Python
 __pycache__/
