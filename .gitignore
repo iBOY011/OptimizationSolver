@@ -1,9 +1,11 @@
 # Node modules
 node_modules/
+*.lock
 
-# Build directories
+# Build ou fichiers générés
 .next/
 build/
+dist/
 
 # Env files
 .env
@@ -12,6 +14,11 @@ build/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+*.log
+
+
+
 
 # IDE files
 .vscode/
@@ -24,3 +31,19 @@ Thumbs.db
 # Exclure temporairement les fichiers spécifiques dans python_backend
 /python_backend/app.py
 /python_backend/solver.py
+
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environnement virtuel
+venv/
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
