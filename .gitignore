@@ -29,7 +29,6 @@ yarn-error.log*
 Thumbs.db
 
 # Exclure temporairement les fichiers spécifiques dans python_backend
-/python_backend/app.py
 /python_backend/solver.py
 
 
