@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Button } from "@/components/ui/button"
 import Visualization from './Visualization'
 
 interface ResultsProps {
@@ -11,17 +10,23 @@ interface ResultsProps {
     variables: number
   }
   solution: {
-    optimal: boolean
+    status: boolean
+    message: string
+    objective_value: number
     variables: number[]
-    objectiveValue: number
-    iterations: number
   } | null
-  steps: string[]
+  isLoading: boolean
+  error: string | null
 }
 
-export default function Results({ problem, solution, steps }: ResultsProps) {
-  const [currentStep, setCurrentStep] = useState(0)
-  const [showStepByStep, setShowStepByStep] = useState(false)
+export default function Results({ problem, solution, isLoading, error }: ResultsProps) {
+  if (isLoading) {
+    return <div>Résolution en cours...</div>
+  }
+
+  if (error) {
+    return <div>Erreur : {error}</div>
+  }
 
   if (!solution) {
     return <div>Aucune solution disponible. Veuillez résoudre le problème.</div>
@@ -30,10 +35,10 @@ export default function Results({ problem, solution, steps }: ResultsProps) {
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold">Résultats</h3>
-      {solution.optimal ? (
+      {solution.status ? (
         <>
-          <p>Solution optimale trouvée en {solution.iterations} itérations.</p>
-          <p>Valeur de la fonction objective : {solution.objectiveValue.toFixed(2)}</p>
+          <p>{solution.message}</p>
+          <p>Valeur de la fonction objective : {solution.objective_value.toFixed(2)}</p>
           <h4 className="text-md font-semibold mt-2">Valeurs des variables :</h4>
           <ul>
             {solution.variables.map((value, index) => (
@@ -44,49 +49,18 @@ export default function Results({ problem, solution, steps }: ResultsProps) {
           </ul>
         </>
       ) : (
-        <p>Aucune solution optimale trouvée. Le problème pourrait être non borné ou infaisable.</p>
+        <p>{solution.message}</p>
       )}
       
       <Visualization problem={problem} solution={solution} />
 
-      <div className="flex justify-between items-center">
-        <Button onClick={() => setShowStepByStep(!showStepByStep)}>
-          {showStepByStep ? 'Masquer' : 'Afficher'} le mode pas à pas
-        </Button>
-        {showStepByStep && (
-          <div>
-            <Button
-              onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
-              disabled={currentStep === 0}
-            >
-              Précédent
-            </Button>
-            <Button
-              onClick={() => setCurrentStep(Math.min(steps.length - 1, currentStep + 1))}
-              disabled={currentStep === steps.length - 1}
-            >
-              Suivant
-            </Button>
-          </div>
-        )}
-      </div>
-
-      {showStepByStep && (
-        <div>
-          <h4 className="text-md font-semibold">Étape {currentStep + 1} / {steps.length}</h4>
-          <p>{steps[currentStep]}</p>
-        </div>
-      )}
-
       <Accordion type="single" collapsible>
-        <AccordionItem value="steps">
-          <AccordionTrigger>Voir toutes les étapes de résolution</AccordionTrigger>
+        <AccordionItem value="details">
+          <AccordionTrigger>Voir les détails de la résolution</AccordionTrigger>
           <AccordionContent>
-            <ol className="list-decimal list-inside">
-              {steps.map((step, index) => (
-                <li key={index}>{step}</li>
-              ))}
-            </ol>
+            <p>Méthode utilisée : {problem.method}</p>
+            <p>Nombre de variables : {problem.variables}</p>
+            <p>Nombre de contraintes : {problem.constraints.length}</p>
           </AccordionContent>
         </AccordionItem>
       </Accordion>

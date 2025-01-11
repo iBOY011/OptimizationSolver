@@ -7,6 +7,7 @@ CORS(app)
 
 @app.route("/solve", methods=["POST"])
 def solve():
+
     try:
         # Récupération des données envoyées par le frontend
         data = request.get_json()

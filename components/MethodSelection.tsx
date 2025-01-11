@@ -9,20 +9,23 @@ interface MethodSelectionProps {
 
 export default function MethodSelection({ method, onUpdate }: MethodSelectionProps) {
   return (
-    <RadioGroup value={method} onValueChange={onUpdate}>
-      <div className="flex items-center space-x-2">
-        <RadioGroupItem value="simplex" id="simplex" />
-        <Label htmlFor="simplex">Simplex</Label>
-      </div>
-      <div className="flex items-center space-x-2">
-        <RadioGroupItem value="two-phase" id="two-phase" />
-        <Label htmlFor="two-phase">Simplex avec deux phases</Label>
-      </div>
-      <div className="flex items-center space-x-2">
-        <RadioGroupItem value="big-m" id="big-m" />
-        <Label htmlFor="big-m">Big-M</Label>
-      </div>
-    </RadioGroup>
+    <div className="space-y-4">
+      <h3 className="text-lg font-semibold">Sélection de la méthode</h3>
+      <RadioGroup value={method} onValueChange={onUpdate}>
+        <div className="flex items-center space-x-2">
+          <RadioGroupItem value="simplex" id="simplex" />
+          <Label htmlFor="simplex">Simplex</Label>
+        </div>
+        <div className="flex items-center space-x-2">
+          <RadioGroupItem value="two_phase" id="two_phase" />
+          <Label htmlFor="two_phase">Simplex à deux phases</Label>
+        </div>
+        <div className="flex items-center space-x-2">
+          <RadioGroupItem value="big_m" id="big_m" />
+          <Label htmlFor="big_m">Méthode Big-M</Label>
+        </div>
+      </RadioGroup>
+    </div>
   )
 }
 

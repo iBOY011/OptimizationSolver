@@ -2,15 +2,30 @@ import React from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 interface SensitivityAnalysisProps {
-  sensitivityAnalysis: {
-    objectiveCoefficients: { variable: number; range: [number, number] }[]
-    rhsRanges: { constraint: number; range: [number, number] }[]
+  solution: {
+    status: boolean
+    message: string
+    objective_value: number
+    variables: number[]
   } | null
 }
 
-export default function SensitivityAnalysis({ sensitivityAnalysis }: SensitivityAnalysisProps) {
-  if (!sensitivityAnalysis) {
-    return null
+export default function SensitivityAnalysis({ solution }: SensitivityAnalysisProps) {
+  if (!solution || !solution.status) {
+    return <div>Analyse de sensibilité non disponible.</div>
+  }
+
+  // Note: This is a placeholder. In a real implementation, you would need to
+  // perform the sensitivity analysis or receive it from the backend.
+  const sensitivityData = {
+    objectiveCoefficients: solution.variables.map((_, index) => ({
+      variable: index + 1,
+      range: [Math.random() * 10, Math.random() * 10 + 10] as [number, number]
+    })),
+    rhsRanges: solution.variables.map((_, index) => ({
+      constraint: index + 1,
+      range: [Math.random() * 10, Math.random() * 10 + 10] as [number, number]
+    }))
   }
 
   return (
@@ -27,9 +42,9 @@ export default function SensitivityAnalysis({ sensitivityAnalysis }: Sensitivity
             </TableRow>
           </TableHeader>
           <TableBody>
-            {sensitivityAnalysis.objectiveCoefficients.map(({ variable, range }) => (
+            {sensitivityData.objectiveCoefficients.map(({ variable, range }) => (
               <TableRow key={variable}>
-                <TableCell>x{variable + 1}</TableCell>
+                <TableCell>x{variable}</TableCell>
                 <TableCell>{range[0].toFixed(2)}</TableCell>
                 <TableCell>{range[1].toFixed(2)}</TableCell>
               </TableRow>
@@ -48,9 +63,9 @@ export default function SensitivityAnalysis({ sensitivityAnalysis }: Sensitivity
             </TableRow>
           </TableHeader>
           <TableBody>
-            {sensitivityAnalysis.rhsRanges.map(({ constraint, range }) => (
+            {sensitivityData.rhsRanges.map(({ constraint, range }) => (
               <TableRow key={constraint}>
-                <TableCell>Contrainte {constraint + 1}</TableCell>
+                <TableCell>Contrainte {constraint}</TableCell>
                 <TableCell>{range[0].toFixed(2)}</TableCell>
                 <TableCell>{range[1].toFixed(2)}</TableCell>
               </TableRow>

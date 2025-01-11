@@ -24,12 +24,12 @@ export default function ObjectiveFunction({ objective, variables, onUpdate }: Ob
     <div className="space-y-4">
       <RadioGroup value={objective.type} onValueChange={handleTypeChange}>
         <div className="flex items-center space-x-2">
-          <RadioGroupItem value="max" id="max" />
-          <Label htmlFor="max">Maximiser</Label>
+          <RadioGroupItem value="maximize" id="maximize" />
+          <Label htmlFor="maximize">Maximiser</Label>
         </div>
         <div className="flex items-center space-x-2">
-          <RadioGroupItem value="min" id="min" />
-          <Label htmlFor="min">Minimiser</Label>
+          <RadioGroupItem value="minimize" id="minimize" />
+          <Label htmlFor="minimize">Minimiser</Label>
         </div>
       </RadioGroup>
       <div className="grid grid-cols-3 gap-4">

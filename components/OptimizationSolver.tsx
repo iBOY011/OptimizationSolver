@@ -26,12 +26,15 @@ interface Problem {
 export default function OptimizationSolver() {
   const [activeTab, setActiveTab] = useState('objective')
   const [problem, setProblem] = useState<Problem>({
-    objective: { type: 'max', coefficients: [] },
-    constraints: [],
+    objective: { type: 'maximize', coefficients: [3, 2] },
+    constraints: [
+      { coefficients: [1, 1], operator: '<=', rhs: 4 },
+      { coefficients: [2, 1], operator: '<=', rhs: 5 }
+    ],
     method: 'simplex',
     variables: 2,
   })
-  const { solution, steps, sensitivityAnalysis, solve } = useSolver()
+  const { solve, isLoading, error, solution } = useSolver()
 
   const validateProblem = (): boolean => {
     if (problem.objective.coefficients.length !== problem.variables) {
@@ -67,8 +70,25 @@ export default function OptimizationSolver() {
   }
 
   const handleSolve = () => {
+    alert("Bouton cliqué");
+    console.log("Bouton cliqué - test");
+    
     if (validateProblem()) {
-      solve(problem)
+      console.log("Problème validé, données envoyées:", {
+        method: problem.method,
+        goal: problem.objective.type,
+        objective: problem.objective.coefficients,
+        constraints: problem.constraints,
+        bounds: Array(problem.variables).fill([0, null])
+      });
+
+      solve(
+        problem.method as 'simplex' | 'two_phase' | 'big_m',
+        problem.objective.type as 'minimize' | 'maximize',
+        problem.objective.coefficients,
+        problem.constraints,
+        Array(problem.variables).fill([0, null]) as [number, number][]
+      )
       setActiveTab('results')
     }
   }
@@ -127,10 +147,10 @@ export default function OptimizationSolver() {
             />
           </TabsContent>
           <TabsContent value="results">
-            <Results problem={problem} solution={solution} steps={steps} />
+            <Results problem={problem} solution={solution} isLoading={isLoading} error={error} />
           </TabsContent>
           <TabsContent value="sensitivity">
-            <SensitivityAnalysis sensitivityAnalysis={sensitivityAnalysis} />
+            <SensitivityAnalysis solution={solution} />
           </TabsContent>
           <TabsContent value="random">
             <RandomProblemGenerator onGenerate={handleRandomProblem} />

@@ -32,6 +32,11 @@ export default function Constraints({ constraints, variables, onUpdate }: Constr
     onUpdate(newConstraints)
   }
 
+  const removeConstraint = (index: number) => {
+    const newConstraints = constraints.filter((_, i) => i !== index)
+    onUpdate(newConstraints)
+  }
+
   return (
     <div className="space-y-4">
       {constraints.map((constraint, index) => (
@@ -67,6 +72,9 @@ export default function Constraints({ constraints, variables, onUpdate }: Constr
             onChange={(e) => updateConstraint(index, 'rhs', e.target.value)}
             className="w-20"
           />
+          <Button variant="destructive" onClick={() => removeConstraint(index)}>
+            Supprimer
+          </Button>
         </div>
       ))}
       <Button onClick={addConstraint}>Ajouter une contrainte</Button>
